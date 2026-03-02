@@ -42,7 +42,7 @@ export async function GET() {
 
     // Make request to Workable API
     const response = await axios.get(
-      `https://renewhome.workable.com/spi/v3/jobs`,
+      `https://${workableSubdomain}.workable.com/spi/v3/jobs`,
       {
         headers: {
           'Authorization': `Bearer ${workableApiKey}`,
