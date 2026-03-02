@@ -70,10 +70,21 @@ export async function GET() {
     // Return the jobs data with CORS headers
     return NextResponse.json({ jobs }, { headers: corsHeaders });
     
-  } catch (error) {
-    console.error('Error fetching jobs:', error);
+  } catch (error: unknown) {
+    const message =
+      error instanceof Error ? error.message : 'Unknown error';
+    const status =
+      axios.isAxiosError(error) && error.response?.status
+        ? error.response.status
+        : 500;
+    const detail = axios.isAxiosError(error)
+      ? error.response?.data
+      : undefined;
+
+    console.error('Error fetching jobs:', { message, status, detail });
+
     return NextResponse.json(
-      { error: 'Failed to fetch jobs' },
+      { error: 'Failed to fetch jobs', message, detail },
       { status: 500, headers: corsHeaders }
     );
   }
